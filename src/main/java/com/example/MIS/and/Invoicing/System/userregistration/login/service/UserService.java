@@ -1,5 +1,6 @@
 package com.example.MIS.and.Invoicing.System.userregistration.login.service;
 
+import com.example.MIS.and.Invoicing.System.userregistration.login.Status;
 import com.example.MIS.and.Invoicing.System.userregistration.login.config.SecurityConfig;
 import com.example.MIS.and.Invoicing.System.userregistration.login.dto.UserDTO;
 import com.example.MIS.and.Invoicing.System.userregistration.login.entity.UserEntity;
@@ -10,25 +11,23 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
-    private final UserEntity userEntity;
-    private final UserDTO userDTO;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserMapper userMapper;
 
-    public UserService(UserEntity userEntity,UserRepository userRepository,PasswordEncoder passwordEncoder,UserDTO userDTO,UserMapper userMapper){
-        this.userEntity=userEntity;
-        this.userDTO=userDTO;
+    public UserService(UserRepository userRepository,PasswordEncoder passwordEncoder,UserMapper userMapper){
         this.userMapper=userMapper;
         this.userRepository=userRepository;
         this.passwordEncoder=passwordEncoder;
     }
     public UserEntity saveUser(UserDTO userDTO){
-        String encodedPassword = passwordEncoder.encode(userEntity.getPassword_hash());
-        UserEntity user = userMapper.toEntity(userDTO,encodedPassword);
-        if(userRepository.existsByEmail(userEntity.getEmail())){
+        if(userRepository.existsByEmail(userDTO.getEmail())){
             throw new RuntimeException("Email already exists");
         }
+        String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+        UserEntity userEntity  = userMapper.toEntity(userDTO,encodedPassword);
+        userEntity.setRole("USER");
+        userEntity.setStatus(Status.ACTIVE);
         return userRepository.save(userEntity);
     }
 }

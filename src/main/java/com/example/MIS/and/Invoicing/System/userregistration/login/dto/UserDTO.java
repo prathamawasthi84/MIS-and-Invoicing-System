@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Size;
 
 public class UserDTO {
     @NotBlank
-    private String full_name;
+    private String fullName;
     @NotBlank
     private String email;
     @NotBlank
@@ -15,8 +15,8 @@ public class UserDTO {
 
     public UserDTO(){}
     //Getters
-    public String getFull_name() {
-        return full_name;
+    public String getFullName() {
+        return fullName;
     }
     public String getEmail() {
         return email;
@@ -28,8 +28,8 @@ public class UserDTO {
         return role;
     }
     //Setters
-    public void setFull_name(String full_name) {
-        this.full_name = full_name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
     public void setEmail(String email) {
         this.email = email;
