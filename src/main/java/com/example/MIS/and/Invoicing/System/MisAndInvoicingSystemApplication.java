@@ -8,7 +8,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class MisAndInvoicingSystemApplication {
 
 	public static void main(String[] args) {
-        System.out.println(new BCryptPasswordEncoder().encode("Admin@12345"));
 		SpringApplication.run(MisAndInvoicingSystemApplication.class, args);
 	}
 

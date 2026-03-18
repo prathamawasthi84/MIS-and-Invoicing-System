@@ -8,6 +8,7 @@ import com.example.MIS.and.Invoicing.System.userregistration.login.entity.UserEn
 import com.example.MIS.and.Invoicing.System.userregistration.login.mapper.UserMapper;
 import com.example.MIS.and.Invoicing.System.userregistration.login.repository.EmailVerifiactionTokenRespository;
 import com.example.MIS.and.Invoicing.System.userregistration.login.repository.UserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -52,6 +53,16 @@ public class UserService {
         emailService.sendVerificationMail(savedUser.getEmail(), token);
 
         return savedUser;
+    }
+    public UserEntity saveUserByAdmin(UserDTO userDTO){
+        if(userRepository.existsByEmail(userDTO.getEmail())){
+            throw new RuntimeException("Email already exists");
+        }
+        String encodedPassword = passwordEncoder.encode(userDTO.getPassword());
+        UserEntity userEntity = userMapper.toEntity(userDTO,encodedPassword);
+        userEntity.setRole(userDTO.getRole());
+        userEntity.setStatus(Status.ACTIVE);
+        return userRepository.save(userEntity);
     }
     public String verifyEmail(String token) {
         Optional<EmailVerificationToken> output = emailVerifiactionTokenRespository.findByToken(token);
